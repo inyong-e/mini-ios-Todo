@@ -8,33 +8,22 @@ class App extends Component {
     super(props);
     this.state = {
       todoItems: [],
-
       selectedTitle: "",
       searchKeyword: "",
     };
   }
 
-  changeTitle = name => {
-    this.setState({
-      selectTitle: name,
-    });
-  };
-  changeSearchKeyword = keyword => {
-    this.setState({
-      searchKeyword: keyword,
-    });
-  };
   render() {
-    const { titleList, todoItems } = this.state;
+    const { todoItems, searchKeyword } = this.state;
     return (
       <div className="App">
         <div className="TitleListArea">
           <TitleList
             todoItems={todoItems}
             onAddTodoItem={this.onAddTodoItem}
-            onAddTitle={this.onAddTitle}
+            onClickTitle={this.onClickTitle}
+            searchKeyword={searchKeyword}
             selectedTitle={this.state.selectedTitle}
-            changeTitle={this.changeTitle}
             changeSearchKeyword={this.changeSearchKeyword}
           />
         </div>
@@ -43,12 +32,24 @@ class App extends Component {
           <TodoList
             selectTitle={this.state.selectTitle}
             searchKeyword={this.state.searchKeyword}
-            changeTitle={this.changeTitle}
           />
         </div>
       </div>
     );
   }
+
+  changeSearchKeyword = keyword => {
+    this.setState({
+      searchKeyword: keyword,
+    });
+  };
+
+  onClickTitle = selectedTitle => () => {
+    this.setState({
+      selectedTitle,
+    });
+  };
+
   onAddTodoItem = newTitle => {
     this.setState({
       todoItems: [...this.state.todoItems, { title: newTitle }],

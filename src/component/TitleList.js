@@ -3,48 +3,22 @@ import React, { Component } from "react";
 class TitleList extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      isShowInputTitle: false,
+      isShowNotice: false,
+    };
   }
 
-  onAddButton = () => {
-    var eventVar = () => {
-      if (window.event.keyCode === 13) {
-        document.activeElement.blur();
-      }
-    };
-    var onClickAddBtn = () => {
-      const { todoItems } = this.props;
+  onAddButton = async () => {
+    await this.setState({
+      isShowInputTitle: true,
+      isShowNotice: false,
+    });
 
-      let newTitle = document.getElementById("inputTitleTag").value;
-      const isExistTitle =
-        todoItems.findIndex(todoItem => todoItem.title === newTitle) >= 0;
-      if (isExistTitle) {
-        document.getElementById("noticeArea").innerHTML =
-          "Already exists this Title.. ";
-      } else if (newTitle !== "") {
-        this.props.onAddTodoItem(newTitle);
-      }
-      document.getElementById("inputTitleTag").remove();
-    };
+    this.props.changeSearchKeyword("")();
+    document.getElementById("input-title-box").focus();
+  };
 
-    document.getElementById("noticeArea").innerHTML = "";
-    document.getElementById("searchInputBox").value = "";
-    this.props.changeSearchKeyword("");
-    var input = document.createElement("input");
-    input.id = "inputTitleTag";
-    input.onkeyup = eventVar;
-    input.placeholder = "새로운 목록";
-    input.onblur = onClickAddBtn;
-    document.querySelector(".newinputArea").appendChild(input);
-    input.focus();
-  };
-  selectTitleFunc = title => {
-    this.clrearNoticeMessage();
-    this.props.changeTitle(title);
-  };
-  clrearNoticeMessage = () => {
-    document.getElementById("noticeArea").innerHTML = "";
-    document.getElementById("searchInputBox").value = "";
-  };
   render() {
     const buttonStyle = {
       fontSize: "12px",
@@ -57,8 +31,13 @@ class TitleList extends Component {
       color: "rgb(190,48,27)",
       fontSize: "15px",
     };
-    const { todoItems, selectedTitle } = this.props;
-    console.log(this.props.selectedTitle);
+    const {
+      todoItems,
+      selectedTitle,
+      searchKeyword,
+      changeSearchKeyword,
+    } = this.props;
+    const { isShowInputTitle, isShowNotice } = this.state;
     return (
       <div>
         <header>
@@ -66,10 +45,9 @@ class TitleList extends Component {
             type="text"
             id="searchInputBox"
             placeholder="검색"
-            onClick={this.clrearNoticeMessage}
-            onChange={e => {
-              this.props.changeSearchKeyword(e.target.value);
-            }}
+            onClick={this.clearText}
+            value={searchKeyword}
+            onChange={changeSearchKeyword(e.target.value)}
           />
         </header>
         iCloud
@@ -78,14 +56,23 @@ class TitleList extends Component {
             <div
               key={todoItem.title}
               className="TitleEntry"
-              onClick={this.onClickTitle(todoItem.title)}
+              onClick={this.props.onClickTitle(todoItem.title)}
               style={todoItem.title === selectedTitle ? selectTitleStyle : {}}
             >
               {todoItem.title}
             </div>
           ))}
-          <div className="newinputArea"></div>
-          <div id="noticeArea" style={noticeAreaStyle}></div>
+          {isShowInputTitle && (
+            <input
+              id="input-title-box"
+              placeholder="새로운 목록"
+              onKeyUp={this.onEventKey}
+              onBlur={this.onClickAddBtn}
+            />
+          )}
+          {isShowNotice && (
+            <div style={noticeAreaStyle}>Already exists this Title..</div>
+          )}
         </div>
         <div className="footer">
           <button onClick={this.onAddButton} style={buttonStyle}>
@@ -95,8 +82,35 @@ class TitleList extends Component {
       </div>
     );
   }
-  onClickTitle = title => () => {
-    this.props.changeTitle(title);
+
+  clearText = () => {
+    this.setState({
+      isShowNotice: false,
+    });
+    document.getElementById("searchInputBox").value = "";
+  };
+
+  onEventKey = () => {
+    if (window.event.keyCode === 13) {
+      document.activeElement.blur();
+    }
+  };
+
+  onClickAddBtn = e => {
+    const { todoItems } = this.props;
+    const newTitle = e.currentTarget.value;
+
+    const isEmpty = newTitle === "";
+    const isExistTitle =
+      todoItems.findIndex(todoItem => todoItem.title === newTitle) >= 0;
+
+    if (!isExistTitle && !isEmpty) {
+      this.props.onAddTodoItem(newTitle);
+    }
+    this.setState({
+      isShowInputTitle: false,
+      isShowNotice: isExistTitle,
+    });
   };
 }
 
