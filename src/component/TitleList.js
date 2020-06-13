@@ -5,21 +5,23 @@ class TitleList extends Component {
     super(props);
   }
 
-  addTitle = () => {
+  onAddButton = () => {
     var eventVar = () => {
       if (window.event.keyCode === 13) {
         document.activeElement.blur();
       }
     };
-    var setNewTitleFunc = () => {
-      const { titleList } = this.props;
+    var onClickAddBtn = () => {
+      const { todoItems } = this.props;
 
       let newTitle = document.getElementById("inputTitleTag").value;
-      if (titleList.includes(newTitle)) {
+      const isExistTitle =
+        todoItems.findIndex(todoItem => todoItem.title === newTitle) >= 0;
+      if (isExistTitle) {
         document.getElementById("noticeArea").innerHTML =
           "Already exists this Title.. ";
       } else if (newTitle !== "") {
-        this.props.onAddTitle(newTitle);
+        this.props.onAddTodoItem(newTitle);
       }
       document.getElementById("inputTitleTag").remove();
     };
@@ -31,7 +33,7 @@ class TitleList extends Component {
     input.id = "inputTitleTag";
     input.onkeyup = eventVar;
     input.placeholder = "새로운 목록";
-    input.onblur = setNewTitleFunc;
+    input.onblur = onClickAddBtn;
     document.querySelector(".newinputArea").appendChild(input);
     input.focus();
   };
@@ -55,7 +57,8 @@ class TitleList extends Component {
       color: "rgb(190,48,27)",
       fontSize: "15px",
     };
-    const { titleList } = this.props;
+    const { todoItems, selectedTitle } = this.props;
+    console.log(this.props.selectedTitle);
     return (
       <div>
         <header>
@@ -71,21 +74,21 @@ class TitleList extends Component {
         </header>
         iCloud
         <div className="ListArea">
-          {titleList.map(title => (
+          {todoItems.map(todoItem => (
             <div
-              key={title}
+              key={todoItem.title}
               className="TitleEntry"
-              onClick={this.onClickTitle(title)}
-              style={title === this.props.selectTitle ? selectTitleStyle : {}}
+              onClick={this.onClickTitle(todoItem.title)}
+              style={todoItem.title === selectedTitle ? selectTitleStyle : {}}
             >
-              {title}
+              {todoItem.title}
             </div>
           ))}
           <div className="newinputArea"></div>
           <div id="noticeArea" style={noticeAreaStyle}></div>
         </div>
         <div className="footer">
-          <button onClick={this.addTitle} style={buttonStyle}>
+          <button onClick={this.onAddButton} style={buttonStyle}>
             +add List
           </button>
         </div>

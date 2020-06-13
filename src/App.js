@@ -7,8 +7,9 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      titleList: [],
-      selectTitle: "",
+      todoItems: [],
+
+      selectedTitle: "",
       searchKeyword: "",
     };
   }
@@ -24,16 +25,17 @@ class App extends Component {
     });
   };
   render() {
-    const { titleList } = this.state;
+    const { titleList, todoItems } = this.state;
     return (
       <div className="App">
         <div className="TitleListArea">
           <TitleList
+            todoItems={todoItems}
+            onAddTodoItem={this.onAddTodoItem}
             onAddTitle={this.onAddTitle}
-            titleList={titleList}
+            selectedTitle={this.state.selectedTitle}
             changeTitle={this.changeTitle}
             changeSearchKeyword={this.changeSearchKeyword}
-            selectTitle={this.state.selectTitle}
           />
         </div>
 
@@ -47,10 +49,10 @@ class App extends Component {
       </div>
     );
   }
-  onAddTitle = newTitle => {
+  onAddTodoItem = newTitle => {
     this.setState({
-      titleList: [...this.state.titleList, newTitle],
-      selectTitle: newTitle,
+      todoItems: [...this.state.todoItems, { title: newTitle }],
+      selectedTitle: newTitle,
     });
   };
 }
