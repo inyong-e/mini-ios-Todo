@@ -38,9 +38,10 @@ class App extends Component {
     );
   }
 
-  changeSearchKeyword = keyword => {
+  changeSearchKeyword = e => {
+    const searchKeyword = e.currentTarget.value;
     this.setState({
-      searchKeyword: keyword,
+      searchKeyword,
     });
   };
 
@@ -54,6 +55,7 @@ class App extends Component {
     this.setState({
       todoItems: [...this.state.todoItems, { title: newTitle }],
       selectedTitle: newTitle,
+      searchKeyword: "",
     });
   };
 }

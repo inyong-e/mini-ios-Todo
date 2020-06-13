@@ -15,22 +15,10 @@ class TitleList extends Component {
       isShowNotice: false,
     });
 
-    this.props.changeSearchKeyword("")();
     document.getElementById("input-title-box").focus();
   };
 
   render() {
-    const buttonStyle = {
-      fontSize: "12px",
-      width: "280px",
-    };
-    const selectTitleStyle = {
-      backgroundColor: "rgb(167,167,167)",
-    };
-    const noticeAreaStyle = {
-      color: "rgb(190,48,27)",
-      fontSize: "15px",
-    };
     const {
       todoItems,
       selectedTitle,
@@ -47,7 +35,7 @@ class TitleList extends Component {
             placeholder="검색"
             onClick={this.clearText}
             value={searchKeyword}
-            onChange={changeSearchKeyword(e.target.value)}
+            onChange={changeSearchKeyword}
           />
         </header>
         iCloud
@@ -57,7 +45,12 @@ class TitleList extends Component {
               key={todoItem.title}
               className="TitleEntry"
               onClick={this.props.onClickTitle(todoItem.title)}
-              style={todoItem.title === selectedTitle ? selectTitleStyle : {}}
+              style={{
+                backgroundColor:
+                  todoItem.title === selectedTitle
+                    ? "rgb(167,167,167)"
+                    : "initial",
+              }}
             >
               {todoItem.title}
             </div>
@@ -71,11 +64,24 @@ class TitleList extends Component {
             />
           )}
           {isShowNotice && (
-            <div style={noticeAreaStyle}>Already exists this Title..</div>
+            <div
+              style={{
+                color: "rgb(190,48,27)",
+                fontSize: "15px",
+              }}
+            >
+              Already exists this Title..
+            </div>
           )}
         </div>
         <div className="footer">
-          <button onClick={this.onAddButton} style={buttonStyle}>
+          <button
+            onClick={this.onAddButton}
+            style={{
+              fontSize: "12px",
+              width: "240px",
+            }}
+          >
             +add List
           </button>
         </div>
