@@ -1,36 +1,63 @@
-import React, { Component } from 'react';
-import TitleList from './component/TitleList';
-import TodoList from './component/TodoList';
-import './css/App.css';
+import React, { Component } from "react";
+import TitleList from "./component/TitleList";
+import TodoList from "./component/TodoList";
+import "./css/App.css";
 
 class App extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
-      currentTitle : '',
-      searchKeyword : ''
-    }
-    
+      todoItems: [],
+      selectedTitle: "",
+      searchKeyword: "",
+    };
   }
-  changeTitle = (name) => {
-    this.setState({
-      currentTitle : name
-    })
-  }
-  changeSearchKeyword = (keyword) => {
-    this.setState({
-      searchKeyword: keyword
-    })
-  }
+
   render() {
+    const { todoItems, searchKeyword } = this.state;
     return (
       <div className="App">
-        <div className='TitleListArea'><TitleList changeTitle = {this.changeTitle} changeSearchKeyword = {this.changeSearchKeyword} currentTitle = {this.state.currentTitle} /></div>
-        
-        <div className='TodoListArea'><TodoList currentTitle={this.state.currentTitle} searchKeyword = {this.state.searchKeyword} changeTitle={this.changeTitle}/></div>
+        <div className="TitleListArea">
+          <TitleList
+            todoItems={todoItems}
+            onAddTodoItem={this.onAddTodoItem}
+            onClickTitle={this.onClickTitle}
+            searchKeyword={searchKeyword}
+            selectedTitle={this.state.selectedTitle}
+            changeSearchKeyword={this.changeSearchKeyword}
+          />
+        </div>
+
+        <div className="TodoListArea">
+          <TodoList
+            selectTitle={this.state.selectTitle}
+            searchKeyword={this.state.searchKeyword}
+          />
+        </div>
       </div>
     );
   }
+
+  changeSearchKeyword = e => {
+    const searchKeyword = e.currentTarget.value;
+    this.setState({
+      searchKeyword,
+    });
+  };
+
+  onClickTitle = selectedTitle => () => {
+    this.setState({
+      selectedTitle,
+    });
+  };
+
+  onAddTodoItem = newTitle => {
+    this.setState({
+      todoItems: [...this.state.todoItems, { title: newTitle }],
+      selectedTitle: newTitle,
+      searchKeyword: "",
+    });
+  };
 }
 
 export default App;

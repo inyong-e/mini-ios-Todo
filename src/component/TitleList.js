@@ -1,88 +1,110 @@
-import React, {Component} from 'react';
+import React, { useState } from "react";
 
-class TitleList extends Component{
-  constructor(props){
-    super(props);
-    this.state = {
-      TitleList : []
+const TitleList = props => {
+  const {
+    todoItems,
+    selectedTitle,
+    onClickTitle,
+    searchKeyword,
+    changeSearchKeyword,
+  } = props;
+
+  const [isShowNotice, setIsShowNotice] = useState(false);
+  const [isShowInputTitle, setIsShowInputTitle] = useState(false);
+
+  const clearText = () => {
+    setIsShowNotice(false);
+    document.getElementById("searchInputBox").value = "";
+  };
+
+  const onEventKey = () => {
+    if (window.event.keyCode === 13) {
+      document.activeElement.blur();
     }
-  }
+  };
 
-  addTitle = () => {
+  const onClickAddBtn = e => {
+    const { todoItems, onAddTodoItem } = props;
+    const newTitle = e.currentTarget.value;
 
-    var eventVar = ()=>{
-      if(window.event.keyCode === 13){
-        document.activeElement.blur();
-      }
+    const isEmpty = newTitle === "";
+    const isExistTitle =
+      todoItems.findIndex(todoItem => todoItem.title === newTitle) >= 0;
+
+    if (!isExistTitle && !isEmpty) {
+      onAddTodoItem(newTitle);
     }
-    var setNewTitleFunc = () => {
-      let newTitleName = document.getElementById('inputTitleTag').value;
-      if(this.state.TitleList.includes(newTitleName)){
-        document.getElementById('noticeArea').innerHTML = 'Already exists this Title.. ';
+    setIsShowInputTitle(false);
+    setIsShowNotice(isExistTitle);
+  };
 
-      }else if(newTitleName !== ''){
-        this.setState({
-          TitleList: [...this.state.TitleList, newTitleName],
-        })
-        this.props.changeTitle(newTitleName);
-      }
-      document.getElementById('inputTitleTag').remove();
-    }
+  const onClickAddListBtn = async () => {
+    await setIsShowInputTitle(true);
+    await setIsShowNotice(false);
 
-    document.getElementById('noticeArea').innerHTML = '';
-    document.getElementById('searchInputBox').value = '';
-    this.props.changeSearchKeyword('');
-    var input = document.createElement('input');
-    input.id = 'inputTitleTag';
-    input.onkeyup = eventVar;
-    input.placeholder = '새로운 목록'
-    input.onblur= setNewTitleFunc;
-    document.querySelector('.newinputArea').appendChild(input);
-    input.focus();
-    
-  }
-  selectTitleFunc = (title) => {
-    
-    this.clrearNoticeMessage();
-    this.props.changeTitle(title);
-  }
-  clrearNoticeMessage = () => {
-    document.getElementById('noticeArea').innerHTML='';
-    document.getElementById('searchInputBox').value = '';
-  }
-  render(){
-
-    const buttonStyle = {
-      fontSize : '12px',
-      width: '280px'
-    } 
-    const selectTitleStyle = {
-      backgroundColor : 'rgb(167,167,167)'
-    }
-    const noticeAreaStyle = {
-      color : 'rgb(190,48,27)',
-      fontSize : '15px'
-    }
-    return(
-      <div>
-        <header>
-          <input type ='text' id='searchInputBox' placeholder='검색' onClick={this.clrearNoticeMessage} onChange={(e)=>{this.props.changeSearchKeyword(e.target.value)}}/>
-        </header>
-        iCloud
-        
-        <div className='ListArea'>
-          {this.state.TitleList.map(
-            (title,index) => (<div key={index} className='TitleEntry' onClick={()=>{this.selectTitleFunc(title)}} style={title === this.props.currentTitle ? selectTitleStyle : {}}>{title}</div>)
-          )}
-          <div className='newinputArea'></div>
-          <div id='noticeArea' style={noticeAreaStyle}></div>
-        </div>
-        <div className='footer'>
-          <button onClick={this.addTitle} style={buttonStyle}>+add List</button>
-        </div>
+    document.getElementById("input-title-box").focus();
+  };
+  return (
+    <div>
+      <header>
+        <input
+          type="text"
+          id="searchInputBox"
+          placeholder="검색"
+          onClick={clearText}
+          value={searchKeyword}
+          onChange={changeSearchKeyword}
+        />
+      </header>
+      iCloud
+      <div className="ListArea">
+        {todoItems.map(todoItem => (
+          <div
+            key={todoItem.title}
+            className="TitleEntry"
+            onClick={onClickTitle(todoItem.title)}
+            style={{
+              backgroundColor:
+                todoItem.title === selectedTitle
+                  ? "rgb(167,167,167)"
+                  : "initial",
+            }}
+          >
+            {todoItem.title}
+          </div>
+        ))}
+        {isShowInputTitle && (
+          <input
+            id="input-title-box"
+            placeholder="새로운 목록"
+            onKeyUp={onEventKey}
+            onBlur={onClickAddBtn}
+          />
+        )}
+        {isShowNotice && (
+          <div
+            style={{
+              color: "rgb(190,48,27)",
+              fontSize: "15px",
+            }}
+          >
+            Already exists this Title..
+          </div>
+        )}
       </div>
-    )
-  }
-}
+      <div className="footer">
+        <button
+          onClick={onClickAddListBtn}
+          style={{
+            fontSize: "12px",
+            width: "240px",
+          }}
+        >
+          +add List
+        </button>
+      </div>
+    </div>
+  );
+};
 
 export default TitleList;
