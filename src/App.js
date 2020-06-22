@@ -30,14 +30,21 @@ class App extends Component {
 
         <div className="TodoListArea">
           <TodoList
-            selectTitle={this.state.selectTitle}
+            todoItems={todoItems}
+            selectedTitle={this.state.selectedTitle}
             searchKeyword={this.state.searchKeyword}
+            setNewTodoEntry={this.setNewTodoEntry}
           />
         </div>
       </div>
     );
   }
-
+  setNewTodoEntry = todoItems => {
+    this.setState({
+      ...this.state,
+      todoItems,
+    });
+  };
   changeSearchKeyword = e => {
     const searchKeyword = e.currentTarget.value;
     this.setState({
