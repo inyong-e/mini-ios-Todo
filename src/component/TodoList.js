@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import SearchView from "./SearchView";
 
 const TodoList = props => {
+  const [selectedEntryIndex, setSelectedEntryIndex] = useState(-1);
+  const onClickEntry = index => () => setSelectedEntryIndex(index);
+  const deleteTodyEntry = () => {};
   const addTodoEntry = () => {
     if (props.selectTitle === "") {
       alert("select Title!");
@@ -39,10 +42,6 @@ const TodoList = props => {
     input.focus();
   };
 
-  const selectTitleStyle = {
-    backgroundColor: "rgb(167,167,167)",
-  };
-
   if (props.searchKeyword === "") {
     const selectedTodoItems = props.todoItems.find(
       todoItem => todoItem.title === props.selectedTitle,
@@ -51,15 +50,20 @@ const TodoList = props => {
       <div>
         <header>
           <button onClick={addTodoEntry}>+</button>
-          <button>-</button>
+          <button onClick={deleteTodyEntry}>-</button>
           <div>{props.selectedTitle}</div>
         </header>
         <br />
         <div>
           {selectedTodoItems &&
             selectedTodoItems.entries &&
-            selectedTodoItems.entries.map(entry => (
-              <div className="todoEntry">
+            selectedTodoItems.entries.map((entry, index) => (
+              <div
+                className={`todoEntry ${
+                  selectedEntryIndex === index ? "selected" : ""
+                }`}
+                onClick={onClickEntry(index)}
+              >
                 <input type="checkbox" defaultChecked={entry.complete} />{" "}
                 {entry.memo}
               </div>

@@ -57,7 +57,6 @@ class App extends Component {
       selectedTitle,
     });
   };
-
   onAddTodoItem = newTitle => {
     this.setState({
       todoItems: [...this.state.todoItems, { title: newTitle }],
