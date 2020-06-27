@@ -4,7 +4,19 @@ import SearchView from "./SearchView";
 const TodoList = props => {
   const [selectedEntryIndex, setSelectedEntryIndex] = useState(-1);
   const onClickEntry = index => () => setSelectedEntryIndex(index);
-  const deleteTodyEntry = () => {};
+  const deleteTodyEntry = () => {
+    const filteredTodoItems = props.todoItems.map(todoItem =>
+      todoItem.selectTitle === props.selectTitle
+        ? {
+            ...todoItem,
+            entries: todoItem.entries.filter(
+              (entry, index) => index !== selectedEntryIndex,
+            ),
+          }
+        : todoItem,
+    );
+    props.setNewTodoEntry(filteredTodoItems);
+  };
   const addTodoEntry = () => {
     if (props.selectTitle === "") {
       alert("select Title!");
