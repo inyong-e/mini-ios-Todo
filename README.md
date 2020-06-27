@@ -1,63 +1,45 @@
+<img src='./img/logo.png' width='50px'>
 
-### `리액트로 작업한 TodoList`
+# 미니 프로젝트 : TODO LIST
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+ios의 `미리알림` 애플리케이션 기능을 유사하게 구현해본 TODO LIST 입니다.
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+### 투두 리스트 입력 화면
 
-### `npm test`
+<img src='./img/selected_todo.png'>
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+### 투두 리스트 검색 화면
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+<img src='./img/search_todo.png'>
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### 투두 리스트 검색어 없음
 
-### `npm run eject`
+<img src='./img/not_result_search.png'>
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+---
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+#### 기능 소개
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+- 투두 리스트 그룹 생성
+- 각 그룹의 투두 리스트 관리
+  - 투두 추가, 삭제 및 투두 완료
+- 투두 리스트 검색 기능
+  - 검색어에 맞는 투두 리스트를 그룹 별 노출
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+#### 기술 스택
 
-## Learn More
+이 프로젝트에 사용된 기술은 다음과 같습니다.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- Language: React.js
+- Styling: CSS
+- Project Setup: create-react-app
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+#### 프로젝트 시연
 
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+- npm install: 기본 라이브러리 패키지 설치
+- npm start: 프로젝트 실행
+- 브라우저 주소 창에 http://localhost:3000 접속
