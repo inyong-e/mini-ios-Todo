@@ -1,33 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
 import SearchView from "./SearchView";
 
-class TodoList extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      todoList: [],
-      currentTodo: null,
-    };
-  }
-  addTodoEntry = () => {
-    if (this.props.selectTitle === "") {
+const TodoList = props => {
+  const [selectedEntryIndex, setSelectedEntryIndex] = useState(-1);
+  const onClickEntry = index => () => setSelectedEntryIndex(index);
+  const deleteTodyEntry = () => {};
+  const addTodoEntry = () => {
+    if (props.selectTitle === "") {
       alert("select Title!");
       return;
     }
-    var eventVar = () => {
+    const eventVar = () => {
       if (window.event.keyCode === 13) {
         document.activeElement.blur();
       }
     };
-    var setNewTitleFunc = () => {
+    const setNewTitleFunc = () => {
       let inputVal = document.getElementById("inputTodoTag").value;
       if (inputVal !== "") {
-        this.setState({
-          todoList: [
-            ...this.state.todoList,
-            { title: this.props.selectTitle, memo: inputVal, complete: false },
-          ],
-        });
+        const updatedTodoItems = props.todoItems.map(todoItem =>
+          todoItem.title === props.selectedTitle
+            ? {
+                ...todoItem,
+                entries: todoItem.entries
+                  ? [...todoItem.entries, { memo: inputVal, complete: false }]
+                  : [{ memo: inputVal, complete: false }],
+              }
+            : todoItem,
+        );
+
+        props.setNewTodoEntry(updatedTodoItems);
       }
       document.getElementById("inputTodoTag").remove();
     };
@@ -39,119 +41,52 @@ class TodoList extends React.Component {
     document.querySelector(".inputTodoArea").appendChild(input);
     input.focus();
   };
-  removeTodoEntry = () => {
-    let { todoList, currentTodo } = this.state;
-    for (var i = 0; i < todoList.length; i++) {
-      if (todoList[i].memo === currentTodo) {
-        todoList.splice(i, 1);
 
-        this.setState({
-          todoList: todoList,
-          currentTodo: null,
-        });
-        return;
-      }
-    }
-  };
-  changeCheck = memo => {
-    let list = this.state.todoList.slice();
-
-    for (var i = 0; i < list.length; i++) {
-      if (list[i].memo === memo) list[i].complete = !list[i].complete;
-    }
-
-    this.setState({
-      todoList: list,
-    });
-  };
-  selectTodo = (memo, title, flag) => {
-    this.setState({
-      currentTodo: memo,
-    });
-    if (flag === "searchClick") {
-      this.props.changeTitle(title);
-    }
-  };
-  render() {
-    const float = {
-      float: "left",
-    };
-    const filterSearchList = this.state.todoList.filter(element => {
-      return element.memo.indexOf(this.props.searchKeyword) !== -1;
-    });
-
-    const selectTitleStyle = {
-      backgroundColor: "rgb(167,167,167)",
-    };
-    if (this.props.searchKeyword === "") {
-      return (
+  if (props.searchKeyword === "") {
+    const selectedTodoItems = props.todoItems.find(
+      todoItem => todoItem.title === props.selectedTitle,
+    );
+    return (
+      <div>
+        <header>
+          <button onClick={addTodoEntry}>+</button>
+          <button onClick={deleteTodyEntry}>-</button>
+          <div>{props.selectedTitle}</div>
+        </header>
+        <br />
         <div>
-          <header>
-            <button onClick={this.addTodoEntry} style={float}>
-              +
-            </button>
-            <button onClick={this.removeTodoEntry} style={float}>
-              -
-            </button>
-            <div>{this.props.selectTitle}</div>
-          </header>
-          <br />
-          <div>
-            {this.state.todoList.map((element, index) => {
-              if (
-                this.props.selectTitle === element.title &&
-                element.complete === false
-              )
-                return (
-                  <div
-                    style={
-                      this.state.currentTodo === element.memo
-                        ? selectTitleStyle
-                        : {}
-                    }
-                    className="todoEntry"
-                    onClick={() => {
-                      this.selectTodo(element.memo);
-                    }}
-                  >
-                    <input
-                      type="checkbox"
-                      defaultChecked={element.complete}
-                      onChange={() => {
-                        this.changeCheck(element.memo);
-                      }}
-                    />{" "}
-                    {element.memo}
-                  </div>
-                );
-            })}
-            <div className="inputTodoArea"></div>
-          </div>
+          {selectedTodoItems &&
+            selectedTodoItems.entries &&
+            selectedTodoItems.entries.map((entry, index) => (
+              <div
+                className={`todoEntry ${
+                  selectedEntryIndex === index ? "selected" : ""
+                }`}
+                onClick={onClickEntry(index)}
+              >
+                <input type="checkbox" defaultChecked={entry.complete} />{" "}
+                {entry.memo}
+              </div>
+            ))}
+          <div className="inputTodoArea"></div>
         </div>
-      );
-    } else {
-      return (
+      </div>
+    );
+  } else {
+    return (
+      <div>
+        <header>
+          <div>'{props.searchKeyword}' (으)로 검색한 결과 - </div>
+        </header>
         <div>
-          <header>
-            <div>
-              '{this.props.searchKeyword}' (으)로 검색한 결과 -{" "}
-              {filterSearchList.length === 0
-                ? "없음"
-                : filterSearchList.length + " 개"}
-            </div>
-          </header>
-          <div>
-            <SearchView
-              searchList={filterSearchList}
-              changeCheck={this.changeCheck}
-              currentTodo={this.state.currentTodo}
-              selectTodo={this.selectTodo}
-            />
-          </div>
+          {/* <SearchView
+            searchList={filterSearchList}
+            
+            currentTodo={this.state.currentTodo}
+          /> */}
         </div>
-      );
-    }
+      </div>
+    );
   }
-}
-
+};
 export default TodoList;

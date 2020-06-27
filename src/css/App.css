@@ -1,40 +1,38 @@
-
-.App .TitleListArea{
-  position:absolute;
+.App .TitleListArea {
+  position: absolute;
   float: left;
   width: 20%;
   height: 100%;
-  background:#ccc;
+  background: #ccc;
   padding: 20px 0 0 10px;
-
 }
 
-.App .TodoListArea{
-  position:absolute;
+.App .TodoListArea {
+  position: absolute;
   margin-top: 25px;
   margin-left: 25%;
   float: left;
   width: 80%;
   height: 100%;
 }
-.TitleListArea header{
+.TitleListArea header {
   margin-bottom: 10px;
 }
 
-.TitleListArea input{
+.TitleListArea input {
   margin-top: 10px;
   width: 90%;
   font-size: 15px;
 }
 
-.TitleListArea .ListArea{
+.TitleListArea .ListArea {
   margin-left: 10px;
 }
 
-.TitleListArea .TitleEntry{
+.TitleListArea .TitleEntry {
   padding: 5px;
-  margin-top:5px;
-  width : 90%;
+  margin-top: 5px;
+  width: 90%;
   border-radius: 10px;
 }
 .TitleListArea .TitleEntry:hover {
@@ -42,28 +40,28 @@
 }
 
 .TitleListArea .footer {
-  position:absolute;
-  bottom:0;
-  height:80px; 
-
+  position: absolute;
+  bottom: 0;
+  height: 80px;
 }
-.TodoListArea header button{
+.TodoListArea header button {
   font-size: 13px;
   margin-right: 5px;
 }
-.TodoListArea header div{
+.TodoListArea header div {
   font-size: 20px;
 }
 .TodoListArea .todoEntry {
   padding: 5px;
-  width:50%;
+  width: 50%;
   border-radius: 10px;
 }
-#inputTodoTag{
+#inputTodoTag {
   margin-top: 10px;
   width: 50%;
   font-size: 15px;
 }
-.TodoListArea .todoEntry:hover{
+.TodoListArea .todoEntry:hover,
+.selected {
   background-color: rgb(236, 236, 236);
 }
